@@ -1,11 +1,11 @@
 wtest.run <-
-function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM") {
+function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM", ENV="data") {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     wtest.run()
-  # AUTHOR:    FERKO CSILLAG, MODIFIED BY TARMO REMMEL
-  # DATE:      15 AUGUST 2003, 16 JULY 2013
+  # AUTHOR:    TARMO REMMEL (FERKO CSILLAG)
+  # DATE:      26 October 2016
   # CALLS:     wibi(), CARsimu(), wi() --> wicc()
   # CALLED BY: NA
   # NEEDS:     NA
@@ -21,28 +21,28 @@ function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM") {
   #
   #--------------------------------------------------------------
 
-  wibi <- function(N=100) {
+  wibi <- function(N=LEVEL) {
     KI <- rep(2, N)
     for(n in 2:N) {
       szor <- (2 * (2 * n - 1))/n
       KI[n] <- KI[n - 1] * szor
-    }
+    } # END FOR: rep
     KI <- KI^2
     KI <- KI/c(1:N)
     return(list(KI, N))
-  }
+  } # END FUNCTION: wibi
 
   RESULT <- rep(0, 2 * REPSIM)
   dim(RESULT) <- c(2, REPSIM)
 
   # SETUP ARRAYS FOR THE WHITTLE ESTIMATION
-  setuparray <- wibi(LEVEL)
-  assign("WIBI", setuparray[[1]], envir=ClassPatternData)
-  assign("WITRUNC", setuparray[[2]], envir=ClassPatternData)
+  #setuparray <- wibi(LEVEL)
+  #assign("WIBI", wibi(LEVEL)[[1]], envir=get(ENV))
+  #assign("WITRUNC", wibi(LEVEL)[[2]], envir=get(ENV))
 
   for(lup in 1:REPSIM) {
     W <- CARsimu(rho = RHO, rajz = F)
-    RESULT[1, lup] <- wi(BE = W, CONTROL = RAJZ, PARAM1 = ClassPatternData$WIBI, PARAM2 = ClassPatternData$WITRUNC, solo=FALSE, SIZE=LEVEL)
+    RESULT[1, lup] <- wi(BE = W, CONTROL = RAJZ, SIZE=LEVEL)
     TEMP <- quantile(W, CPROP)
     GARB <- W > TEMP[1]
     GARB <- factor(GARB)
@@ -58,10 +58,10 @@ function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM") {
       ans <- readline()
       if(ans == 1)
       RAJZ <- F
-    }
-    RESULT[2, lup] <- wi(BE = W.0, CONTROL = RAJZ, PARAM1 = ClassPatternData$WIBI, PARAM2 = ClassPatternData$WITRUNC, solo=FALSE, SIZE=LEVEL)
+    } # END IF
+    RESULT[2, lup] <- wi(BE = W.0, CONTROL = RAJZ, SIZE=LEVEL)
     cat("\r                          ", lup, "ITERATION OUT OF:", REPSIM)
-  }
+  } # END FOR: lup
   RESULT <- unlist(RESULT)
   dim(RESULT) <- c(2, REPSIM)
 
@@ -72,8 +72,8 @@ function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM") {
     boxplot(RESULT[1,  ], RESULT[2,  ], names = c("ORIGINAL-CONTINUOUS", "BINARY"), ylim = c(0, 0.25))
     mastertitle <- paste("RHO | PROP : ", as.character(RHO), " | ", as.character(CPROP), sep = " ")
     title(mastertitle)
-  }
+  } # END IF
   
   return(RESULT)
   	
-}
+} # END FUNCTION: wtest.run

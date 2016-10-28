@@ -1,11 +1,11 @@
 build.lut <-
-function(LEVEL=6, REPSIM=5, RAJZ=FALSE, CIM="") {
+function(LEVEL=6, REPSIM=5, RAJZ=FALSE, CIM="", ENV="data") {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     build.lut()
-  # AUTHOR:    FERKO CSILLAG, MODIFIED BY TARMO REMMEL
-  # DATE:      15 AUGUST 2003, 11 MAY 2011
+  # AUTHOR:    TARMO REMMEL (ORIGINAL BY FERKO CSILLAG)
+  # DATE:      26 October 2016
   # CALLS:     wtest.run()
   # CALLED BY: NA
   # NEEDS:     NA
@@ -27,13 +27,13 @@ function(LEVEL=6, REPSIM=5, RAJZ=FALSE, CIM="") {
       CPROP <- lupcprop
       IY <- IY + 1
       for(lup in 1:REPSIM) {
-        RESULTT <- wtest.run(REPSIM = REPSIM, LEVEL = LEVEL, RHO= RHO, CPROP = CPROP, RAJZ = RAJZ, CIM = CIM)
-      }
+        RESULTT <- wtest.run(REPSIM = REPSIM, LEVEL = LEVEL, RHO= RHO, CPROP = CPROP, RAJZ = RAJZ, CIM = CIM, ENV=ENV)
+      } # END FOR: lup
       DIFF[IX, IY] <- median(RESULTT[1,  ]) - median(RESULTT[2,])
-      }
-  }
+    } # END FOR: lupcprop
+  } # END FOR: luprho
 
   # RETURN THE BIAS CORRECTION MATRIX TO THE USER
   return(DIFF)
 
-}
+} # END FUNCTION: build.lut

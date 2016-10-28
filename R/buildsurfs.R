@@ -16,7 +16,7 @@ function(reps=1000, verbose=TRUE) {
   #            STORED FOR 38 CLASS METRICS.
   #--------------------------------------------------------------
 
-  library(SDMTools)
+  # library(SDMTools)
 
   # DEFINE BINARY PROPORTION INTERVALS (9 OF THEM)
   propvals <- seq(10,90,by=10)

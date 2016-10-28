@@ -1,11 +1,11 @@
 singlemap <-
-function(IMG = ClassPatternData$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6) {
+function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBOSE=TRUE, reps=10, LEVEL=6) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     singlemap()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      22 APRIL 2011
+  # DATE:      26 October 2016
   # CALLS:     findrow(), findcol(), CARsimu(), ClassStat(), wi()
   # CALLED BY: NA
   # NEEDS:     SDMTools LIBRARY
@@ -17,38 +17,38 @@ function(IMG = ClassPatternData$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6) {
   #            HIGHER CLASS VALUE IN THE IMAGE (E.G., 0 AND 1)
   #--------------------------------------------------------------
 
-  # LOAD NECESSRY LIBRARY
-  library(SDMTools)
+  # READ THE WHITTLE CORRECTION MATRIX FROM THE APPROPRIATE ENVIRONMENT
+  DIFFERENCEMAT <- get(CORRECTIONMAT, envir=get(ENV))
 
   # COMPUTE THE WHITTLE ESTIMATION OF RHO
-  rho <- wi(BE=IMG, CONTROL=TRUE, solo=TRUE, SIZE=LEVEL)
+  rho <- wi(BE=IMG, CONTROL=TRUE, SIZE=LEVEL)
 
   # COMPUTE THE ESTIMATED PROPORTION OF THE LOWER CATEGORY VALUE
   proportion <- table(IMG)[1]/sum(table(IMG))
 
-  rindex <- findrow(autocorr=rho, VERBOSE=FALSE)
-  cindex <- findcol(prop=proportion, VERBOSE=FALSE)
+  rindex <- findrow(autocorr=rho, DIFFMAT=DIFFERENCEMAT, VERBOSE=FALSE)
+  cindex <- findcol(prop=proportion, DIFFMAT=DIFFERENCEMAT, VERBOSE=FALSE)
 
   # APPLY BIAS CORRECTION AND DEAL WITH SPECIAL CASES OF 99
   if(rindex == 99 | cindex == 99) {
     correctionfactor <- 0
-  }
+  } # END IF
   else {
-    correctionfactor <- ClassPatternData$DIFF50[rindex, cindex]
-  }
+    correctionfactor <- DIFFERENCEMAT[rindex, cindex]
+  } # END ELSE
 
   # APPLY BIAS CORRECTION FACTOR
   fixedrho <- rho + correctionfactor
   if(fixedrho >= 0.25) {
     fixedrho <- 0.12499975
-  }
+  } # END IF
  
   # PROVIDE USER FEEDBACK IF REQUESTED
   if(VERBOSE) {
     cat("rho:      ", rho, "\n", sep="")
     cat("adj. rho: ", fixedrho, "\n", sep="")
     cat("True rho: ", fixedrho * 4, "\n", sep="")
-  }
+  } # END IF
 
   # NOTE: USE fixedrho IN CARsimu() AS THE R1 AND C1 PARAMETERS
   cat("\n...about to simulate ", reps, " realizations of binary images \nhaving a proportion of ", proportion, " low-value class pixels and a \nspatial autocorrelation parameter of ", fixedrho * 4, ".\n", sep="")
@@ -76,7 +76,7 @@ function(IMG = ClassPatternData$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6) {
     lowclass[a,] <- results[1,]
     highclass[a,] <- results[2,]
   
-  }
+  } # END FOR: a
 
   # ADD NAMES TO THE DATAFRAMES TO DIFFERENTIATE THE VARIOUS METRICS
   colnames(lowclass) <- colnames(results)
@@ -92,9 +92,9 @@ function(IMG = ClassPatternData$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6) {
     cat("LOW (black): ", table(IMG)[1], " pixels\n", sep="")
     cat("HIGH (white): ", table(IMG)[2], " pixels\n", sep="")
     cat("---------------------------------------\n")
-  }
+  } # END IF
     
   # RETURN OUTPUTS FROM FUNCTION AS A LIST
   return(list=c(LOW=lowclass,HIGH=highclass))
 
-}
+} # END FUNCTION: singlemap

@@ -1,11 +1,11 @@
 imaks <-
-function (BE=ClassPatternData$demoimage1, numcol=NULL, LENG=4, colour=FALSE) { 
+function (BE=data$demoimage1, numcol=NULL, LENG=4, colour=FALSE) { 
 
   #--------------------------------------------------------------
   # 
   # TITLE:     imaks()
   # AUTHOR:    SANDOR KABOS, MODIFIED BY TARMO REMMEL
-  # DATE:      15 AUGUST 2003
+  # DATE:      26 October 2016
   # CALLS:     NA
   # CALLED BY: NA
   # NEEDS:     IMAGE MATRIX OBJECT
@@ -15,14 +15,14 @@ function (BE=ClassPatternData$demoimage1, numcol=NULL, LENG=4, colour=FALSE) {
 
   cim <- function (x) {
     attr(x,"cim")
-  }
+  } # END FUNCTION
 
   sorrev <- function (BEs=BE) { 
     NR<-dim(BEs)[1] 
     NRR<-1:NR 
     REVENR<-rev(NRR) 
     BE[REVENR,] 
-  } 
+  } # END FUNCTION
 
   NR <- dim(BE)[1] 
   NC <- dim(BE)[2] 
@@ -41,17 +41,17 @@ function (BE=ClassPatternData$demoimage1, numcol=NULL, LENG=4, colour=FALSE) {
   if(!colour) {
     # WHEN colour=FALSE, PRODUCE A BLACK & WHITE IMAGE
     COL <- palette(c("black", "white")) 
-  }
+  } # END IF
   else {
     # IF numcol IS NOT GIVEN IN FUNCTION CALL, SET IT TO THE MAXIMUM NUMBER OF COLOURS IN THE IMAGE
     if(is.null(numcol)) {
       numcol <- length(table(BE))
       COL <- topo.colors(numcol)  
-    }
+    } # END IF
     else {
       COL <- topo.colors(numcol)
-    }
-  }
+    } # END ELSE
+  } # END ELSE
     
   image(t(sorrev(BE)), col=COL, xaxt="n", yaxt="n", axes=FALSE) 
   axis(1, at=ATR, labels=LABR) 
@@ -59,4 +59,4 @@ function (BE=ClassPatternData$demoimage1, numcol=NULL, LENG=4, colour=FALSE) {
   title(cim(BE)) 
   par(pty="m") 
   
-}
+} # END FUNCTION: imaks

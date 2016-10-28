@@ -4,11 +4,11 @@
 Depict the empirical (null) distribution for class-focused pattern metrics.
 }
 \description{
-Produce a series of one or more boxplots depicting the empirical (null) distribuitons of class-focused pattern metrics, as computed for a single landscape map.
+Produce a series of one or more boxplots depicting the empirical (null) distribuitons of class-focused pattern metrics, as computed for a single landscape map. The code has been updated as of October 24 2016 to permit boxplots to be drawn even if landscape metrics have NA in them (those values are simply ignored).
 }
 \usage{
-singleplotter(data = ClassPatternData$result1, img = ClassPatternData$demoimage1, 
-metrics = c(1, 5, 10), rows = 1, cols = 3, addactual = TRUE, colour = TRUE)
+singleplotter(data = data$result1, img = data$demoimage1, metrics = c(1, 5, 10), 
+rows = 1, cols = 3, addactual = TRUE, colour = TRUE)
 }
 \arguments{
   \item{data}{
@@ -42,7 +42,7 @@ The output is graphical.
 \references{
 Remmel, T.K. and M.-J. Fortin. 2013. Categorical class map patterns: characterization and comparison. Landscape Ecology. DOI: 10.1007/s/10980-013-9905-x.
 
-Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R) (Pending 2014). In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
+Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R). 2016. In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
 }
 \author{
 Tarmo K. Remmel
@@ -54,8 +54,8 @@ No further notes at this time.
 See Also \code{\link{singlemap}}, and \code{\link{doubleplotter}}.
 }
 \examples{
-result1 <- singlemap(IMG=ClassPatternData$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6)
-singleplotter(data =  result1, img = ClassPatternData$demoimage1, metrics = c(1, 5, 10), 
+result1 <- singlemap(IMG=data$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6)
+singleplotter(data =  result1, img = data$demoimage1, metrics = c(1, 5, 10), 
 rows = 1, cols = 3, addactual = TRUE, colour = TRUE)
 }
 \keyword{ distributions }

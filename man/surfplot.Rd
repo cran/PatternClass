@@ -8,7 +8,7 @@ This function produces three separate plots on a 1 row by 3 column output view. 
 }
 \usage{
 surfplot(metric = 9, prop = 0.7, rho = 0.2, colour = TRUE, drop = TRUE,
-cross = TRUE, dat=ClassPatternData$surfaces)
+cross = TRUE, dat=data$surfaces)
 }
 \arguments{
   \item{metric}{
@@ -40,7 +40,7 @@ This function requires a valid result from the function \code{buildsurfs} to exi
 This function returns a graphic plot.
 }
 \references{
-Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R) (Pending 2014). In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
+Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R). 2016. In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
 }
 \author{
 Tarmo K. Remmel
@@ -53,6 +53,6 @@ See Also \code{\link{singlemap}}, \code{\link{singleplotter}}, \code{\link{build
 }
 \examples{
 surfplot(metric = 9, prop = 0.7, rho = 0.2, colour = TRUE, drop = TRUE,
-cross = TRUE, dat=ClassPatternData$surfaces)
+cross = TRUE, dat=data$surfaces)
 }
 \keyword{ distributions }

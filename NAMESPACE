@@ -1,1 +1,8 @@
+exportPattern("^[[:alpha:]]+")
 export(singlemap, singleplotter, doubleplotter, imaks, build.lut, buildsurfs, surfplot, CARsimu)
+importFrom("grDevices", "palette", "topo.colors", "trans3d")
+importFrom("graphics", "axis", "boxplot", "image", "par", "persp", "plot", "plot.new", "points", "segments", "title")
+importFrom("stats", "fft", "median", "nlminb", "quantile", "rnorm")
+importFrom("SDMTools", "ClassStat")
+importFrom("utils", "data")
+

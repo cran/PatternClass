@@ -1,11 +1,11 @@
 wi <-
-function(BE=ClassPatternData$demoimage1, CONTROL=TRUE, PARAM1=ClassPatternData$WIBI, PARAM2=ClassPatternData$WITRUNC, solo=FALSE, SIZE=6) {
+function(BE=data$demoimage1, CONTROL=TRUE, SIZE=6) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     wi()
-  # AUTHOR:    FERKO CSILLAG AND SANDOR KABOS, MODIFIED: TARMO REMMEL
-  # DATE:      6 MAY 2013
+  # AUTHOR:    TARMO REMMEL (FERKO CSILLAG, SANDOR KABOS) 
+  # DATE:      26 October 2016
   # CALLS:     NA
   # CALLED BY: wtest.loop()
   # NEEDS:     NA
@@ -20,7 +20,7 @@ function(BE=ClassPatternData$demoimage1, CONTROL=TRUE, PARAM1=ClassPatternData$W
   #
   #--------------------------------------------------------------
 
-  wibi <- function(N=100) {
+  wibi <- function(N=SIZE) {
     KI <- rep(2, N)
     for(n in 2:N) {
       szor <- (2 * (2 * n - 1))/n
@@ -33,12 +33,12 @@ function(BE=ClassPatternData$demoimage1, CONTROL=TRUE, PARAM1=ClassPatternData$W
 
   wiga <- function(gamma=0.1) {
     g2 <- gamma^2
-    KI <- array(dim = ClassPatternData$WITRUNC)
+    KI <- array(dim = wibi(SIZE)[[2]])
     KI[1] <- g2
-    for(i in 2:ClassPatternData$WITRUNC) {
+    for(i in 2:wibi(SIZE)[[2]]) {
       KI[i] <- KI[i - 1] * g2
     }
-    KI <- t(KI) %*% ClassPatternData$WIBI
+    KI <- t(KI) %*% wibi(SIZE)[[1]]
     KI <- KI/2
     KI <- KI + log(CC$C0 - CC$C1 * gamma)
     return(KI)
@@ -56,16 +56,6 @@ function(BE=ClassPatternData$demoimage1, CONTROL=TRUE, PARAM1=ClassPatternData$W
     return(list(C0 = ITT, C1 = 2 * (FUGG + VIZSZ)))
   }
 
-  if(solo) {
-    setuparray <- wibi(SIZE)
-    assign("WIBI", setuparray[[1]], envir=ClassPatternData)
-    assign("WITRUNC", setuparray[[2]], envir=ClassPatternData)
-  }
-  else {
-    assign("WIBI", PARAM1, envir=ClassPatternData)
-    assign("WITRUNC", PARAM2, envir=ClassPatternData)
-  }
-
   CC <- wicc(BE)
   CO <- unlist(CC)[1]
   C1 <- unlist(CC)[2]
@@ -77,4 +67,4 @@ function(BE=ClassPatternData$demoimage1, CONTROL=TRUE, PARAM1=ClassPatternData$W
 
   return(GARB$value)
   
-}
+} # END FUNCTION: wi

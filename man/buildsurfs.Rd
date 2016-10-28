@@ -24,7 +24,7 @@ This is a simulation-intensive procedure and takes a long time.  It is only nece
 The returned value is an array called surfaces having dimensions [metrics, proportions, configurations, reps].
 }
 \references{
-Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R) (Pending 2014). In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
+Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in landscape pattern? (using R). 2016. In Gergel, S.E. and M.G. Turner. Learning landscape ecology: concepts and techniques for a sustainable world (2nd ed.). New York: Springer. 
 }
 \author{
 Tarmo K. Remmel
@@ -36,7 +36,7 @@ The enclosed code is currently limited to 64x64 pixel subsets; however, future d
 See Also \code{\link{singlemap}}, \code{\link{singleplotter}}, and \code{\link{doubleplotter}} 
 }
 \examples{
-surfaces <- ClassPatternData$surfaces
+surfaces <- data$surfaces
 # COMPUTE SURFACES
 \donttest{surfaceexample <- buildsurfs(reps = 5, verbose = TRUE) }
 # COMPUTE MEDIAN SURFACE FOR A SINGLE METRIC

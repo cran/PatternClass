@@ -7,7 +7,7 @@ Draws a matrix in the proper orientation, as it it were a raster landscape.
 A simple drawing function for matrices that are actually representing raster landcape maps.  This function also controls the use of colour for nominal maps.  This is a generic function for drawing any raster image that should not be drawn as a matrix (where the origin is not at the lower-left corner, but rather the upper-left corner.  This function draws a matrix as a map using the proper positioning of the origin and gridded values.
 }
 \usage{
-imaks(BE = ClassPatternData$demoimage1, numcol = NULL, LENG = 4, colour = FALSE)
+imaks(BE = data$demoimage1, numcol = NULL, LENG = 4, colour = FALSE)
 }
 \arguments{
   \item{BE}{
@@ -43,6 +43,6 @@ Currently none.
 }
 \examples{
 data(demoimage1)
-imaks(BE = ClassPatternData$demoimage1, numcol = NULL, LENG = 4, colour = FALSE) 
+imaks(BE = data$demoimage1, numcol = NULL, LENG = 4, colour = FALSE) 
 }
 \keyword{ hplot }

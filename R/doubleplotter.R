@@ -1,5 +1,5 @@
 doubleplotter <-
-function(data1=ClassPatternData$result1, data2=ClassPatternData$result2, img1=ClassPatternData$demoimage1, img2=ClassPatternData$demoimage2, metric=5) {
+function(data1=data$result1, data2=data$result2, img1=data$demoimage1, img2=data$demoimage2, metric=5) {
 
   #--------------------------------------------------------------
   # 

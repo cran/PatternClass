@@ -1,11 +1,11 @@
 singleplotter <-
-function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics=c(1,5,10), rows=1, cols=3, addactual=TRUE, colour=TRUE) {
+function(data=data$result1, img=data$demoimage1, metrics=c(1,5,10), rows=1, cols=3, addactual=TRUE, colour=TRUE) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     singleplotter()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      16 JULY 2013
+  # DATE:      26 October 2016
   # CALLS:     NA
   # CALLED BY: NA
   # NEEDS:     SDMTools LIBRARY
@@ -17,15 +17,9 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
   #            WERE ESTIMATED TO ILLUSTRATE HOW EXPECTED OR
   #            THAT LANDSCAPE IS, GIVEN SIMULATED RESULTS.
   #            SETTING colour=FALSE RESULTS IN A BW PLOT
-  #
-  # FUTURE:    FIX PLOTTING YLIM TO FORCE INCLUSION OF RED DOT
-  #            THIS ONLY HAPPENS WHEN THE RED DOT (ACTUAL LANDSCAPE)
-  #            VALUE IS FAR BEYOND THE EXPECTATION.
+  # USAGE:     singleplotter(data=result1, metrics=c(2,7,18,20,21,22), rows=2, cols=3, addactual=TRUE)
   #
   #--------------------------------------------------------------
-
-  # EXAMPLE USAGE:
-  # singleplotter(data=result1, metrics=c(2,7,18,20,21,22), rows=2, cols=3, addactual=TRUE)
 
   # USED FOR PRODUCING BOXPLOTS OF CLASS-LEVEL LPI RESULTS
   # [1] "LOW.class"                    "LOW.n.patches"               
@@ -75,7 +69,23 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
   par(mfrow=c(rows,cols), pty="s")
  
   for(num in 1:length(metrics)) {
-    boxplot(data[metrics[num]])
+    if(addactual==TRUE) {
+      # DEFINE ylim VALUES TO FORCE RANGE THAT INCLUDES ACTUAL IF OUTSIDE OF SIMULATED RANGE
+      # STORE MIN AND MAX FOR SIMULATED RANGE
+      ymin <- min(data[[metrics[num]]], na.rm=TRUE)
+      ymax <- max(data[[metrics[num]]], na.rm=TRUE)
+      # NOW, ADJUST FOR ACTUAL VALUE IF NECESSARY
+      if(actual[1,metrics[num]] > ymax) {
+        ymax <- actual[1,metrics[num]]
+      } # END IF
+      if(actual[1,metrics[num]] < ymin) {
+        ymin <- actual[1,metrics[num]]
+      } # END IF
+      boxplot(data[metrics[num]], ylim=c(ymin,ymax))
+    } # END IF
+    else {
+      boxplot(data[metrics[num]])
+    } # END ELSE
     title(names(data[metrics[num]]))
     
     # ADD DATA POINT FOR ACTUAL LPI VALUE IF DESIRED
@@ -97,7 +107,7 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
            cat(higherthan, " higher values, ", lowerthan, " lower values, and ", sameas, " identical values as the map.\n", sep="")
            cat("Probability of map having a value <= to expectation: P=", formatC(probhighereq, digits=4, format="f"), "\n", sep="")
            cat("Probability of map having a value >= to expectation: P=", formatC(problowereq, digits=4, format="f"), "\n\n", sep="")
-         }
+         } # END IF
          else {
            # THIS IS THE NUMBER OF SIMULATED MAPS
            numsim <- length(data[[metrics[num]]])
@@ -114,9 +124,8 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
            cat(higherthan, " higher values, ", lowerthan, " lower values, and ", sameas, " identical values as the map. \n", sep="")
            cat("Probability of map having a value <= to expectation: P=", formatC(probhighereq, digits=4, format="f"), "\n", sep="")
            cat("Probability of map having a value >= to expectation: P=", formatC(problowereq, digits=4, format="f"), "\n\n", sep="")
-
-         }
-       }
+         } # END ELSE
+       } # END IF
        else {
          if(colour) {
            # THIS IS THE NUMBER OF SIMULATED MAPS
@@ -134,7 +143,7 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
            cat(higherthan, " higher values, ", lowerthan, " lower values, and ", sameas, " identical values as the map. \n", sep="")
            cat("Probability of map having a value <= to expectation: P=", formatC(probhighereq, digits=4, format="f"), "\n", sep="")
            cat("Probability of map having a value >= to expectation: P=", formatC(problowereq, digits=4, format="f"), "\n\n", sep="")
-         }
+         } # END IF
          else {
            # THIS IS THE NUMBER OF SIMULATED MAPS
            numsim <- length(data[[metrics[num]]])
@@ -151,10 +160,10 @@ function(data=ClassPatternData$result1, img=ClassPatternData$demoimage1, metrics
            cat(higherthan, " higher values, ", lowerthan, " lower values, and ", sameas, " identical values as the map. \n", sep="")
            cat("Probability of map having a value <= to expectation: P=", formatC(probhighereq, digits=4, format="f"), "\n", sep="")
            cat("Probability of map having a value >= to expectation: P=", formatC(problowereq, digits=4, format="f"), "\n\n", sep="")
-         }
-       }
-    } # END IF
+         } # END ELSE
+       } # END IF
+    } # END ELSE
     
-  } # END FOR
+  } # END FOR: num
   
-}
+} # END FUNCTION: singleplotter
