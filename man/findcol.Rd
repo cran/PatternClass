@@ -4,7 +4,7 @@
 An internal utility that identifies that identifies the appropriate column of the Whittle correction matrix.
 }
 \description{
-This is an internal utility function for identifying a column index value in the Whittle correction matrix and returns it to the calling function for use in further processing. This function is not intended for use directly by users.
+This is an internal utility function for identifying a column index value in the Whittle correction matrix and returns it to the calling function for use in further processing.  This function is not intended for use directly by users.
 }
 \usage{
 findcol(prop = 0.32, DIFFMAT=data$DIFF50, VERBOSE=FALSE)

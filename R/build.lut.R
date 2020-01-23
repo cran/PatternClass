@@ -5,7 +5,7 @@ function(LEVEL=6, REPSIM=5, RAJZ=FALSE, CIM="", ENV="data") {
   # 
   # TITLE:     build.lut()
   # AUTHOR:    TARMO REMMEL (ORIGINAL BY FERKO CSILLAG)
-  # DATE:      26 October 2016
+  # DATE:      23 January 2020
   # CALLS:     wtest.run()
   # CALLED BY: NA
   # NEEDS:     NA
@@ -14,6 +14,10 @@ function(LEVEL=6, REPSIM=5, RAJZ=FALSE, CIM="", ENV="data") {
   #            AS A LOOKUP TABLE FOR BIAS ADJUSTMENT ON RHO
   #            ESTIMATION ON A BINARY MAP.
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   DIFF <- rep(0, 110)
   dim(DIFF) <- c(10, 11)

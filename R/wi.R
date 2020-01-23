@@ -1,11 +1,11 @@
 wi <-
-function(BE=data$demoimage1, CONTROL=TRUE, SIZE=6) {
+function(BE=data$demoimage1, CONTROL=FALSE, SIZE=6) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     wi()
   # AUTHOR:    TARMO REMMEL (FERKO CSILLAG, SANDOR KABOS) 
-  # DATE:      26 October 2016
+  # DATE:      23 January 2020
   # CALLS:     NA
   # CALLED BY: wtest.loop()
   # NEEDS:     NA
@@ -13,12 +13,16 @@ function(BE=data$demoimage1, CONTROL=TRUE, SIZE=6) {
   #            ESTIMATOR AND BIAS CORRECTOR
   #         
   #            TO RUN ON AN IMAGE WITHOUT THE LOOPING WHITTLE MATERIAL:
-  #            rho <- wi(BE=demoimage2, solo=TRUE, SIZE=6)
+  #            rho <- wi(BE=demoimage2, CONTROL=TRUE, SIZE=6)
   #
   #            OTHERWISE, THIS FUNCTION IS CALLED BY wtest.run(), 
   #            WHICH MAY BE CALLED BY build.lut()
   #
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   wibi <- function(N=SIZE) {
     KI <- rep(2, N)
@@ -61,7 +65,9 @@ function(BE=data$demoimage1, CONTROL=TRUE, SIZE=6) {
   C1 <- unlist(CC)[2]
   KI <- nlminb(0.1, wiga, lower = 0, upper = 0.25)
   if(CONTROL) {
-    write(c("rho , tau2 : ", round(KI$par, 4), round(CC$C0 - CC$C1 * KI$par, 4)))
+      # REMOVING THIS LINE (WRITE TO FILE) WITH WRITE TO SCREEN
+      # write(c("rho , tau2 : ", round(KI$par, 4), round(CC$C0 - CC$C1 * KI$par, 4)))
+      cat("rho , tau2 : ", round(KI$par, 4), round(CC$C0 - CC$C1 * KI$par, 4))
   }
   GARB <- list(value = KI$par)
 

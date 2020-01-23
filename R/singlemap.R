@@ -1,21 +1,25 @@
-singlemap <-
-function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBOSE=TRUE, reps=10, LEVEL=6) {
+singlemap <- function(IMG =data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBOSE=TRUE, reps=1, LEVEL=6) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     singlemap()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      26 October 2016
-  # CALLS:     findrow(), findcol(), CARsimu(), ClassStat(), wi()
+  # DATE:      23 January 2020
+  # CALLS:     findrow(), findcol(), CARsimu(), calculate_lsm(), wi()
   # CALLED BY: NA
-  # NEEDS:     SDMTools LIBRARY
+  # NEEDS:     landscapemetrics, raster
   # NOTES:     USED TO PERFORM THE RHO BIAS CORRECTION AND TO 
   #            PRODUCE DATAFRAMES OF CLASS METRIC RESULTS FOR
   #            reps NUMBER OF REALIZATIONS.  RESULTS ARE STORED
   #            IN TWO OBJECTS, ONE WITH METRICS COMPUTED FOR THE
   #            LOWER CLASS VALUE IN THE IMAGE, A SECOND FOR THE
   #            HIGHER CLASS VALUE IN THE IMAGE (E.G., 0 AND 1)
+  #            
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   # READ THE WHITTLE CORRECTION MATRIX FROM THE APPROPRIATE ENVIRONMENT
   DIFFERENCEMAT <- get(CORRECTIONMAT, envir=get(ENV))
@@ -24,6 +28,7 @@ function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBO
   rho <- wi(BE=IMG, CONTROL=TRUE, SIZE=LEVEL)
 
   # COMPUTE THE ESTIMATED PROPORTION OF THE LOWER CATEGORY VALUE
+  
   proportion <- table(IMG)[1]/sum(table(IMG))
 
   rindex <- findrow(autocorr=rho, DIFFMAT=DIFFERENCEMAT, VERBOSE=FALSE)
@@ -39,8 +44,10 @@ function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBO
 
   # APPLY BIAS CORRECTION FACTOR
   fixedrho <- rho + correctionfactor
+  # IF RHO IS 0.25 OR GREATER, IT EXCEEDS THE LIMIT FOR CARsimu().
+
   if(fixedrho >= 0.25) {
-    fixedrho <- 0.12499975
+    fixedrho <- 0.2499999
   } # END IF
  
   # PROVIDE USER FEEDBACK IF REQUESTED
@@ -53,10 +60,10 @@ function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBO
   # NOTE: USE fixedrho IN CARsimu() AS THE R1 AND C1 PARAMETERS
   cat("\n...about to simulate ", reps, " realizations of binary images \nhaving a proportion of ", proportion, " low-value class pixels and a \nspatial autocorrelation parameter of ", fixedrho * 4, ".\n", sep="")
 
-  # PREPARE DATAFRAMES TO HOLD LPI RESULTS FOR EACH REALIZATION
-  lowclass <- as.data.frame(matrix(data = NA, nrow = reps, ncol = 38, byrow = FALSE,dimnames=NULL))
-  highclass <- as.data.frame(matrix(data = NA, nrow = reps, ncol = 38, byrow = FALSE,dimnames=NULL))
-  
+  # PREPARE DATAFRAME TO HOLD METRIC RESULTS FOR EACH REALIZATION
+  # COLUMNS ARE METRICS, ROWS ARE REPLICATES
+  tab <- as.data.frame(matrix(data=NA, ncol=110, nrow=reps))
+
   for(a in 1:reps) {
   
     # PROVIDE USER FEEDBACK ON SCREEN
@@ -71,17 +78,20 @@ function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBO
     realization <- GARB
     dim(realization) <- c(64,64)
 
-    # COMPUTE AND STORE CLASS METRICS   
-    results <- ClassStat(realization)
-    lowclass[a,] <- results[1,]
-    highclass[a,] <- results[2,]
-  
+    # COMPUTE AND STORE THE 55 CLASS METRICS USING PACKAGE: landscapemetrics
+    results <- calculate_lsm(raster(realization), level="class")
+    tab[a,] <- t(as.vector(results[,6]))
+
+    # ADD COLUMN NAMES IF THIS IS THE FIRST ITERATION
+    if(a==1) {
+      # ADD NAMES TO THE DATAFRAME TO DIFFERENTIATE THE COLUMNS
+      names(tab) <- paste(rep(c("LOW.", "HIGH."),55), t(as.vector(results[,5])))	
+    }
+
   } # END FOR: a
 
-  # ADD NAMES TO THE DATAFRAMES TO DIFFERENTIATE THE VARIOUS METRICS
-  colnames(lowclass) <- colnames(results)
-  colnames(highclass) <- colnames(results)
 
+  
   # PROVIDE USER FEEDBACK IF REQUESTED
   if(VERBOSE) {
     cat("\n---------------------------------------\n")
@@ -94,7 +104,7 @@ function(IMG = data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBO
     cat("---------------------------------------\n")
   } # END IF
     
-  # RETURN OUTPUTS FROM FUNCTION AS A LIST
-  return(list=c(LOW=lowclass,HIGH=highclass))
+  # RETURN OUTPUTS FROM FUNCTION
+  return(tab)
 
 } # END FUNCTION: singlemap

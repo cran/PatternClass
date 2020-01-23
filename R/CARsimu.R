@@ -5,7 +5,7 @@ function(LEVEL=6, rho=0.2499, row2=0, col2=0, rc1=0, cr1=0, maindi=1, rajz=TRUE)
   # 
   # TITLE:     CARsimu()
   # AUTHOR:    FERKO CSILLAG AND SANDOR KABOS, MODIFIED: TARMO REMMEL
-  # DATE:      6 MAY 2013
+  # DATE:      23 January 2020
   # CALLS:     NA
   # CALLED BY: singlemap()
   # NEEDS:     NA
@@ -16,6 +16,10 @@ function(LEVEL=6, rho=0.2499, row2=0, col2=0, rc1=0, cr1=0, maindi=1, rajz=TRUE)
   #            
   #            WAS PREVIOUSLY wujabki()
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   col1 <- rho
   row1 <- rho
@@ -59,13 +63,15 @@ function(LEVEL=6, rho=0.2499, row2=0, col2=0, rc1=0, cr1=0, maindi=1, rajz=TRUE)
     nkar <- 3
   }
   A <- A/sum(A*A)
-  cat("\r ---> CAR Simulation by FFT")
+  #cat("\r ---> CAR Simulation by FFT")
   if(rajz) {
-    par(mfrow = c(1, 1))
-    image(A)
-    cat("\n PRESS ENTER TO CONTINUE, ELSE TO STOP")
-    ans <- readline()
+      # INSERT POSSIBLE DRAWING FUNCTIONALITY HERE BUT BEST TO MOVE IT OUT OF THIS FUNCTION
   }
+  #par(mfrow = c(1, 1))
+  #image(A)
+  #cat("\n PRESS ENTER TO CONTINUE, ELSE TO STOP")
+  #ans <- readline()
+  #}
   return(A)
 	
 }

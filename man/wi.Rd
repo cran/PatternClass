@@ -7,7 +7,7 @@ An internal utility that helps with the Whittle estimation.
 This is an internal utility function for helping with the Whittle estimation. This function is not intended for use directly by users.
 }
 \usage{
-wi(BE=data$demoimage1, CONTROL=TRUE, SIZE=6)
+wi(BE=data$demoimage1, CONTROL=FALSE, SIZE=6)
 }
 \arguments{
   \item{BE}{

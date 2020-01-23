@@ -5,7 +5,7 @@ function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM", ENV="d
   # 
   # TITLE:     wtest.run()
   # AUTHOR:    TARMO REMMEL (FERKO CSILLAG)
-  # DATE:      26 October 2016
+  # DATE:      23 January 2020
   # CALLS:     wibi(), CARsimu(), wi() --> wicc()
   # CALLED BY: NA
   # NEEDS:     NA
@@ -20,6 +20,10 @@ function(LEVEL=6, REPSIM=20, RHO=0.2499999, CPROP=0.5, RAJZ=T, CIM="CIM", ENV="d
   #            BIOMETRIKA 41:434-449.] AND THE RESULTS ARE SUMMARIZED.
   #
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   wibi <- function(N=LEVEL) {
     KI <- rep(2, N)

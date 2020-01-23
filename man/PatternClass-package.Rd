@@ -12,8 +12,8 @@ Permits the estimation of composition and configuration parameters from a binary
 \tabular{ll}{
 Package: \tab PatternClass\cr
 Type: \tab Package\cr
-Version: \tab 1.7.1\cr
-Date: \tab 2016-10-27\cr
+Version: \tab 2.0.0\cr
+Date: \tab 2020-01-21\cr
 License: \tab WGPS >= 3.0\cr
 }
 singlemap, singleplotter, and doubleplotter are the workhorses of this package.
@@ -29,7 +29,7 @@ Remmel, T.K. and M.-J. Fortin. What constitutes a significant difference in land
 }
 \keyword{ package }
 \seealso{
-It would be prudent to also observe the SDMTools package.
+It would be prudent to also observe the landscapemetrics package.
 }
 \examples{
 # Specific examples are provided on the individual function manual pages.

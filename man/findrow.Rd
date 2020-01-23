@@ -4,7 +4,7 @@
 An internal utility that identifies that identifies the appropriate row of the Whittle correction matrix.
 }
 \description{
-This is an internal utility function for identifying a row index value in the Whittle correction matrix and returns it to the calling function for use in further processing. This function is not intended for use directly by users.
+This is an internal utility function for identifying a row index value in the Whittle correction matrix and returns it to the calling function for use in further processing.  This function is not intended for use directly by users.
 }
 \usage{
 findrow(autocorr = 0.2, DIFFMAT=data$DIFF50, VERBOSE=FALSE)

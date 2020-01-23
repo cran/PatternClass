@@ -1,11 +1,10 @@
-doubleplotter <-
-function(data1=data$result1, data2=data$result2, img1=data$demoimage1, img2=data$demoimage2, metric=5) {
+doubleplotter <- function(data1=data$result1, data2=data$result2, metric=5) {
 
   #--------------------------------------------------------------
   # 
   # TITLE:     doubleplotter()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      24 MAY 2011
+  # DATE:      22 JANUARY 2020
   # CALLS:     NA
   # CALLED BY: NA
   # NEEDS:     SDMTools LIBRARY
@@ -18,53 +17,41 @@ function(data1=data$result1, data2=data$result2, img1=data$demoimage1, img2=data
   #            THAT LANDSCAPE IS, GIVEN SIMULATED RESULTS.
   #--------------------------------------------------------------
 
-  # USED FOR PRODUCING BOXPLOTS OF CLASS-LEVEL LPI RESULTS
-  # [1] "LOW.class"                    "LOW.n.patches"               
-  # [3] "LOW.total.area"               "LOW.prop.landscape"          
-  # [5] "LOW.patch.density"            "LOW.total.edge"              
-  # [7] "LOW.edge.density"             "LOW.landscape.shape.index"   
-  # [9] "LOW.largest.patch.index"      "LOW.mean.patch.area"         
-  # [11] "LOW.sd.patch.area"            "LOW.min.patch.area"          
-  # [13] "LOW.max.patch.area"           "LOW.perimeter.area.frac.dim" 
-  # [15] "LOW.mean.perim.area.ratio"    "LOW.sd.perim.area.ratio"     
-  # [17] "LOW.min.perim.area.ratio"     "LOW.max.perim.area.ratio"    
-  # [19] "LOW.mean.shape.index"         "LOW.sd.shape.index"          
-  # [21] "LOW.min.shape.index"          "LOW.max.shape.index"         
-  # [23] "LOW.mean.frac.dim.index"      "LOW.sd.frac.dim.index"       
-  # [25] "LOW.min.frac.dim.index"       "LOW.max.frac.dim.index"      
-  # [27] "LOW.total.core.area"          "LOW.prop.landscape.core"     
-  # [29] "LOW.mean.patch.core.area"     "LOW.sd.patch.core.area"      
-  # [31] "LOW.min.patch.core.area"      "LOW.max.patch.core.area"     
-  # [33] "LOW.prop.like.adjacencies"    "LOW.aggregation.index"       
-  # [35] "LOW.lanscape.division.index"  "LOW.splitting.index"         
-  # [37] "LOW.effective.mesh.size"      "LOW.patch.cohesion.index"    
-  # [39] "HIGH.class"                   "HIGH.n.patches"              
-  # [41] "HIGH.total.area"              "HIGH.prop.landscape"         
-  # [43] "HIGH.patch.density"           "HIGH.total.edge"             
-  # [45] "HIGH.edge.density"            "HIGH.landscape.shape.index"  
-  # [47] "HIGH.largest.patch.index"     "HIGH.mean.patch.area"        
-  # [49] "HIGH.sd.patch.area"           "HIGH.min.patch.area"         
-  # [51] "HIGH.max.patch.area"          "HIGH.perimeter.area.frac.dim"
-  # [53] "HIGH.mean.perim.area.ratio"   "HIGH.sd.perim.area.ratio"    
-  # [55] "HIGH.min.perim.area.ratio"    "HIGH.max.perim.area.ratio"   
-  # [57] "HIGH.mean.shape.index"        "HIGH.sd.shape.index"         
-  # [59] "HIGH.min.shape.index"         "HIGH.max.shape.index"        
-  # [61] "HIGH.mean.frac.dim.index"     "HIGH.sd.frac.dim.index"      
-  # [63] "HIGH.min.frac.dim.index"      "HIGH.max.frac.dim.index"     
-  # [65] "HIGH.total.core.area"         "HIGH.prop.landscape.core"    
-  # [67] "HIGH.mean.patch.core.area"    "HIGH.sd.patch.core.area"     
-  # [69] "HIGH.min.patch.core.area"     "HIGH.max.patch.core.area"    
-  # [71] "HIGH.prop.like.adjacencies"   "HIGH.aggregation.index"      
-  # [73] "HIGH.lanscape.division.index" "HIGH.splitting.index"        
-  # [75] "HIGH.effective.mesh.size"     "HIGH.patch.cohesion.index"   
+  # METRICS BY CLASS (FOR SELECTING WHICH ONES TO PLOT)
+  # [1] "LOW.ai"         "HIGH.ai"        "LOW.area_cv"    "HIGH.area_cv"   "LOW.area_mn"    "HIGH.area_mn"   "LOW.area_sd"
+  # [8] "HIGH.area_sd"   "LOW.ca"         "HIGH.ca"        "LOW.cai_cv"     "HIGH.cai_cv"    "LOW.cai_mn"     "HIGH.cai_mn"
+  # [15] "LOW.cai_sd"     "HIGH.cai_sd"    "LOW.circle_cv"  "HIGH.circle_cv" "LOW.circle_mn"  "HIGH.circle_mn" "LOW.circle_sd"
+  # [22] "HIGH.circle_sd" "LOW.clumpy"     "HIGH.clumpy"    "LOW.cohesion"   "HIGH.cohesion"  "LOW.contig_cv"  "HIGH.contig_cv"
+  # [29] "LOW.contig_mn"  "HIGH.contig_mn" "LOW.contig_sd"  "HIGH.contig_sd" "LOW.core_cv"    "HIGH.core_cv"   "LOW.core_mn"
+  # [36] "HIGH.core_mn"   "LOW.core_sd"    "HIGH.core_sd"   "LOW.cpland"     "HIGH.cpland"    "LOW.dcad"       "HIGH.dcad"
+  # [43] "LOW.dcore_cv"   "HIGH.dcore_cv"  "LOW.dcore_mn"   "HIGH.dcore_mn"  "LOW.dcore_sd"   "HIGH.dcore_sd"  "LOW.division"
+  # [50] "HIGH.division"  "LOW.ed"         "HIGH.ed"        "LOW.enn_cv"     "HIGH.enn_cv"    "LOW.enn_mn"     "HIGH.enn_mn"
+  # [57] "LOW.enn_sd"     "HIGH.enn_sd"    "LOW.frac_cv"    "HIGH.frac_cv"   "LOW.frac_mn"    "HIGH.frac_mn"   "LOW.frac_sd"
+  # [64] "HIGH.frac_sd"   "LOW.gyrate_cv"  "HIGH.gyrate_cv" "LOW.gyrate_mn"  "HIGH.gyrate_mn" "LOW.gyrate_sd"  "HIGH.gyrate_sd"
+  # [71] "LOW.iji"        "HIGH.iji"       "LOW.lpi"        "HIGH.lpi"       "LOW.lsi"        "HIGH.lsi"       "LOW.mesh"
+  # [78] "HIGH.mesh"      "LOW.ndca"       "HIGH.ndca"      "LOW.nlsi"       "HIGH.nlsi"      "LOW.np"         "HIGH.np"
+  # [85] "LOW.pafrac"     "HIGH.pafrac"    "LOW.para_cv"    "HIGH.para_cv"   "LOW.para_mn"    "HIGH.para_mn"   "LOW.para_sd"
+  # [92] "HIGH.para_sd"   "LOW.pd"         "HIGH.pd"        "LOW.pladj"      "HIGH.pladj"     "LOW.pland"      "HIGH.pland"
+  # [99] "LOW.shape_cv"   "HIGH.shape_cv"  "LOW.shape_mn"   "HIGH.shape_mn"  "LOW.shape_sd"   "HIGH.shape_sd"  "LOW.split"
+  # [106] "HIGH.split"     "LOW.tca"        "HIGH.tca"       "LOW.te"         "HIGH.te"
 
-  
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   # DRAW BOXPLOTS FOR THE TWO SPCIFIED METRICS
-  map1 <- as.vector(unlist(data1[metric]))
-  map2 <- as.vector(unlist(data2[metric]))
-  tempobj <- cbind(map1, map2)
-  dimnames(tempobj)[[2]] <- c("Map 1", "Map 2")
-  boxplot(tempobj, notch=TRUE, ylab=names(data1)[metric])
   
-}
+  # EXTRACT PROPER METRICS FOR EACH MAP RESULT
+  map1 <- data1[,metric]
+  map2 <- data2[,metric]
+  
+  # COMBINE BY COLUMNS THE TWO EXTRACTED METRIC VECTORS
+  tempobj <- cbind(map1, map2)
+  
+  # ATTACH LABELS FOR EACH MAP
+  dimnames(tempobj)[[2]] <- c("Map 1", "Map 2")
+  
+  # DRAW THE BOXPLOT
+  boxplot(tempobj, notch=FALSE, ylab=names(data1)[metric])
+  
+} # END FUNCTION: doubleplotter

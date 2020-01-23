@@ -4,11 +4,16 @@
 Depict the empirical (null) distribution for class-focused pattern metrics.
 }
 \description{
-Produce a series of one or more boxplots depicting the empirical (null) distribuitons of class-focused pattern metrics, as computed for a single landscape map. The code has been updated as of October 24 2016 to permit boxplots to be drawn even if landscape metrics have NA in them (those values are simply ignored).
+Produce a series of one or more boxplots depicting the empirical (null) distribuitons of class-focused pattern metrics, as computed for a single landscape map.  The code has been updated as of October 24 2016 to permit boxplots to be drawn even if landscape metrics have NA in them (those values are simply ignored).  As of 21 January 2020, the code now relies on landscapemetrics and raster packages rather than the diminished SDMTools.
 }
 \usage{
-singleplotter(data = data$result1, img = data$demoimage1, metrics = c(1, 5, 10), 
-rows = 1, cols = 3, addactual = TRUE, colour = TRUE)
+singleplotter(data = data$result1, 
+  img = data$demoimage1, 
+  metrics = c(1, 5, 10), 
+  rows = 1, 
+  cols = 3, 
+  addactual = TRUE, 
+  colour = TRUE)
 }
 \arguments{
   \item{data}{
@@ -18,19 +23,19 @@ This is the output object produced by \code{singlemap}.  It contains the empiric
 This is the binary integer matrix landscape map that corresponds to the \code{data} argument.
 }
   \item{metrics}{
-A vector listing the integers, corresponding to specific metrics, that you want to plot.
+A vector listing the integers, corresponding to specific metrics, that you want to plot.  There are 55 unique class-level metrics computed for each of 2 classes; thus, the specific metric values in the specified vector can range from 1-110.
 }
   \item{rows}{
 This argument controls the number of rows (of plots) on the output graphics device.  The total number of graphs that can be displayed simultaneously will be (\code{rows} * \code{cols}).  These values should be assigned to correspond with the number of \code{metrics} that you want to view.  Trying to display too many will make them very small and not very informative.  It may be more effective to simply call this function multiple times with fewer metrics.
 }
   \item{cols}{
-This argument controls the number of columns (of plots) on the output graphics device.  The total number of graphs that can be displayed simultaneously will be (\code{rows} * \code{cols}).  These values should be assigned to correspond with the number of \code{metrics} that you want to view.  Trying to display too many will make them very small and not very informative.  It may be more effective to simply call this function multiple times with fewer metrics.
+This argument controls the number of columns (of plots) on the output graphics device. The total number of graphs that can be displayed simultaneously will be (\code{rows} * \code{cols}).  These values should be assigned to correspond with the number of \code{metrics} that you want to view.  Trying to display too many will make them very small and not very informative.  It may be more effective to simply call this function multiple times with fewer metrics.
 }
   \item{addactual}{
 If TRUE, then the landscape's actual class-focused pattern metric will be added to the plot to depict its relative position within the empirical (null) distribution.
 }
   \item{colour}{
-If TRUE, the actual landscape's class-focused pattern metric, if added, will be drawn in red.  If FALSE, the plot will be without colour. 
+If TRUE, the actual landscape's class-focused pattern metric, if added, will be drawn in red.  If FALSE, the plot will be without colour (hollow circle). 
 }
 }
 \details{
@@ -54,8 +59,8 @@ No further notes at this time.
 See Also \code{\link{singlemap}}, and \code{\link{doubleplotter}}.
 }
 \examples{
-result1 <- singlemap(IMG=data$demoimage1, VERBOSE=TRUE, reps=10, LEVEL=6)
-singleplotter(data =  result1, img = data$demoimage1, metrics = c(1, 5, 10), 
-rows = 1, cols = 3, addactual = TRUE, colour = TRUE)
+# EXAMPLE USES PREVIOUSLY PRODUCED RESULTS TO SPEED-UP THE EXAMPLE,
+# BUT THE EXAMPLE FROM singlemap() SHOULD BE CALLED FIRST
+singleplotter(data = data$result1, img = data$demoimage1, metrics = c(1, 5, 10))
 }
 \keyword{ distributions }

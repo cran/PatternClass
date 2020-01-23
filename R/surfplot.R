@@ -5,7 +5,7 @@ function(metric=9, prop=0.7, rho=0.2, colour=TRUE, drop=TRUE, cross=TRUE, dat=da
   # 
   # TITLE:     surfplot()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      26 October 2016
+  # DATE:      23 January 2020
   # CALLS:     NA
   # CALLED BY: NA
   # NEEDS:     MATRIX OBJECT FOR SURFACE AND X,Y COORDINATES
@@ -17,6 +17,10 @@ function(metric=9, prop=0.7, rho=0.2, colour=TRUE, drop=TRUE, cross=TRUE, dat=da
   #            IF colour=FALSE, THE PLOT IS DONE IN BW
   #            IF drop=FALSE, THE DROP LINE FROM THE POINT IS OMITTED
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   surfaces <- dat
 

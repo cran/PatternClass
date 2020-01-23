@@ -5,18 +5,20 @@ function(reps=1000, verbose=TRUE) {
   # 
   # TITLE:     buildsurfs()
   # AUTHOR:    TARMO REMMEL
-  # DATE:      23 JULY 2013
-  # CALLS:     CARsimu(), ClassStat()
+  # DATE:      23 JANUARY 2020
+  # CALLS:     CARsimu(), calculate_lsm()
   # CALLED BY: NA
-  # NEEDS:     SDMTools LIBRARY
+  # NEEDS:     landscapemetrics, raster
   # NOTES:     USED TO BUILD AN ARRAY OF EXPECTED CLASS METRIC
   #            RESULTS ALONG WITH THEIR VARIABILITY BASED ON
   #            1000 REALIZATIONS ACROSS 9 LEVELS OF THEMATIC
-  #            PROPORTION, AND 11 LEVELS OF RHO.  RESULTS ARE
-  #            STORED FOR 38 CLASS METRICS.
+  #            PROPORTION, AND 11 LEVELS OF RHO. RESULTS ARE
+  #            STORED FOR 55 CLASS METRICS (x2 CLASS LEVELS).
   #--------------------------------------------------------------
 
-  # library(SDMTools)
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   # DEFINE BINARY PROPORTION INTERVALS (9 OF THEM)
   propvals <- seq(10,90,by=10)
@@ -25,7 +27,7 @@ function(reps=1000, verbose=TRUE) {
   rhovals <- seq(0,0.2499999, by=0.2499999/10)
 
   # BUILD AN ARRAY TO STORE RESULTS DIMENSIONS:[METRIC,PROPORTION,RHO,REPLICATE]
-  storage <- array(data=NA, dim=c(38,9,11,reps))
+  storage <- array(data=NA, dim=c(110,9,11,reps))
   
   # LOOP THROUGH COMBINATIONS AND SIMULATE REPLICATES COMPUTING CLASS METRICS FOR EACH
   for(prop in 1:9) {
@@ -47,12 +49,12 @@ function(reps=1000, verbose=TRUE) {
         dim(realization) <- c(64,64)
 
         # COMPUTE AND STORE CLASS METRICS   
-        results <- ClassStat(realization)
-                  
-        # WRITE METRICS TO APPROPRIATE ARRAY AND LOCATION
-        storage[,prop,rho,replicate] <- results[1,]
-        dim(storage) <- c(38,9,11,reps)
+        results <- calculate_lsm(raster(realization), level="class")
               
+        # WRITE METRICS TO APPROPRIATE ARRAY LOCATION
+        storage[,prop,rho,replicate] <- t(as.vector(results[,6]))
+
+        dim(storage) <- c(110,9,11,reps)
         
       } # END FOR: REPLICATE
     } # ENF FOR: RHO 
@@ -63,7 +65,7 @@ function(reps=1000, verbose=TRUE) {
   }
 
   storage <- as.numeric(storage)
-  storage <- array(storage, c(38,9,11,reps))
+  storage <- array(storage, c(110,9,11,reps))
   return(storage)
   
 }

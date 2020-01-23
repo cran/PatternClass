@@ -5,13 +5,17 @@ function (BE=data$demoimage1, numcol=NULL, LENG=4, colour=FALSE) {
   # 
   # TITLE:     imaks()
   # AUTHOR:    SANDOR KABOS, MODIFIED BY TARMO REMMEL
-  # DATE:      26 October 2016
+  # DATE:      23 January 2020
   # CALLS:     NA
   # CALLED BY: NA
   # NEEDS:     IMAGE MATRIX OBJECT
   # NOTES:     PROVIDES PROPER ORIENTATION OF IMAGE FOR VIEWING
   #            LENG CONTROLS THE LABELING ALONG THE X AND Y AXES
   #--------------------------------------------------------------
+
+  # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
+  opar <- par(no.readonly =TRUE)
+  on.exit(par(opar))
 
   cim <- function (x) {
     attr(x,"cim")
