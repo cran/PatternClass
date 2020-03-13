@@ -8,8 +8,7 @@ This function estimates the composition and configuration parameters for a binar
 }
 \usage{
 singlemap(IMG = data$demoimage1, 
-  CORRECTIONMAT = "DIFF50", 
-  ENV="WhittleData", 
+  CORRECTIONMAT = data$DIFF50,
   VERBOSE = TRUE,
   reps = 1,
   LEVEL=6)
@@ -19,10 +18,7 @@ singlemap(IMG = data$demoimage1,
 This is a numeric, binary matrix that represents a raster landscape.  Internally, for computing landscape metrics, this is handled as a raster class object, but input must be a two-valued matrix.  There is no implementation for the spatial resolution of each cell as the computed metrics do not require this value.  It assumes that the spatial resolution is consistent in both dimensions and across the entire scene.  The image is also assumed to be a graphic representation resulting from a stationary spatial process that is 64x64 pixels in extent.  The extent limitation will be expanded in a future release but for stationary and isotropic landscape patterns, this is deemed sufficient for now and could be used in a landscape sampling context.
 }
   \item{CORRECTIONMAT}{
-This is the name of a numeric matrix that provides the correction factors based on Whittle's estimation.  The defalut matrix DIFF50 is provided in the WhittleData environment that is supplied with this package.  However, if image sizes differ (i.e., not the 64x64 demos that are provided), this matrix needs to be recreated using \code{build.lut} and the result provided here.  The code will search for this name in the WhittleData environment.
-}
-  \item{ENV}{
-This is the name of the environment where the CORRECTIONMAT correction matrix is stored. The default location is "WhittleData", but if the user creates and saves these elsewhwere, the environment location can be adjusted here.
+This is the name of a numeric matrix that provides the correction factors based on Whittle's estimation.  The defalut matrix DIFF50 is provided in the WhittleData environment that is supplied with this package.  However, if image sizes differ (i.e., not the 64x64 demos that are provided), this matrix needs to be recreated using \code{build.lut} and the result provided here.  The code, by default, will search for this name in the data environment unless you specifiy a custom matrix that you have created.
 }
   \item{VERBOSE}{
 This argument is set to TRUE if you desire extensive on-screen feedback as to what the program is doing.  If set to FALSE, much less information is written to screen.  It is useful to set to TRUE if \code{reps} is large, since processing times can be long; this gives an idea as to how much time is remaining to complete processing the data. 
@@ -57,8 +53,8 @@ Implementation is currently for 64x64 binary landscapes, provided as arguments i
 See Also \code{\link{singleplotter}}, and \code{\link{doubleplotter}}.
 }
 \examples{
-result1 <- singlemap(IMG = data$demoimage1, CORRECTIONMAT = "DIFF50", 
-  ENV="WhittleData", VERBOSE = TRUE, reps = 1, LEVEL=6) 
+result1 <- singlemap(IMG = data$demoimage1, CORRECTIONMAT = data$DIFF50, 
+  VERBOSE = TRUE, reps = 1, LEVEL=6) 
 }
 \keyword{ distribution }
 \keyword{ classes }

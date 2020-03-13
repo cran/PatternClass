@@ -1,4 +1,4 @@
-singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,10), rows=1, cols=3, addactual=TRUE, colour=TRUE) {
+singleplotter <- function(dat=data$result1, img=data$demoimage1, metrics=c(1,5,10), rows=1, cols=3, addactual=TRUE, colour=TRUE) {
 
   #--------------------------------------------------------------
   # 
@@ -39,13 +39,14 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
   # [106] "HIGH.split"     "LOW.tca"        "HIGH.tca"       "LOW.te"         "HIGH.te"       
 
   # SAVE GRAPHIC PARAMETERS AND RESTATE THEM ON EXIT
-  opar <- par(no.readonly =TRUE)
+  opar <- par(no.readonly=TRUE)
   on.exit(par(opar))
 
   # COMPUTE ACTUAL CLASS METRICS
-  actual <- calculate_lsm(raster(img), level="class")
-  actual <- as.data.frame(t(as.vector(actual[,6])))
-  names(actual) <- names(data)
+  actual <- calculate_lsm(landscape=raster(img), level="class")
+  actual2 <- as.data.frame(t(as.vector(actual[,6])))
+  actual <- actual2
+  names(actual) <- names(dat)
 
   # SETUP GRAPHIC ENVIRONMENT
   plot.new()   
@@ -55,8 +56,8 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
     if(addactual==TRUE) {
       # DEFINE ylim VALUES TO FORCE RANGE THAT INCLUDES ACTUAL IF OUTSIDE OF SIMULATED RANGE
       # STORE MIN AND MAX FOR SIMULATED RANGE
-      ymin <- min(data[[metrics[num]]], na.rm=TRUE)
-      ymax <- max(data[[metrics[num]]], na.rm=TRUE)
+      ymin <- min(dat[[metrics[num]]], na.rm=TRUE)
+      ymax <- max(dat[[metrics[num]]], na.rm=TRUE)
       # NOW, ADJUST FOR ACTUAL VALUE IF NECESSARY
       if(actual[1,metrics[num]] > ymax) {
         ymax <- actual[1,metrics[num]]
@@ -64,25 +65,25 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
       if(actual[1,metrics[num]] < ymin) {
         ymin <- actual[1,metrics[num]]
       } # END IF
-      boxplot(data[metrics[num]], ylim=c(ymin,ymax))
+      boxplot(dat[metrics[num]], ylim=c(ymin,ymax))
     } # END IF
     else {
-      boxplot(data[metrics[num]])
+      boxplot(dat[metrics[num]])
     } # END ELSE
-    title(names(data[metrics[num]]))
+    title(names(dat[metrics[num]]))
     
     # ADD DATA POINT FOR ACTUAL LPI VALUE IF DESIRED
     if(addactual == TRUE) {
        if(metrics[num] < 110) {  # DO NOT ALLOW PLOTTING OF METRICS THAT DO NOT EXIST
          if(colour) {
            # THIS IS THE NUMBER OF SIMULATED MAPS
-           numsim <- length(data[[metrics[num]]])
+           numsim <- length(dat[[metrics[num]]])
            points(actual[1,metrics[num]], pch=21, col="red", bg="red", cex=1.75)
            actualval <- actual[1,metrics[num]]
-           cat("Actual Metric Value (", names(data[metrics[num]]), "): ", actualval, "\n")
-           higherthan <- sum(data[[metrics[num]]] > actualval)
+           cat("Actual Metric Value (", names(dat[metrics[num]]), "): ", actualval, "\n")
+           higherthan <- sum(dat[[metrics[num]]] > actualval)
            if(is.na(higherthan)) { higherthan <- 0 }
-           lowerthan <- sum(data[[metrics[num]]] < actualval)
+           lowerthan <- sum(dat[[metrics[num]]] < actualval)
            if(is.na(lowerthan)) { lowerthan <- 0 }
            sameas <- numsim - lowerthan - higherthan
            probhighereq <- (higherthan + sameas) / numsim
@@ -93,13 +94,13 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
          } # END IF
          else {
            # THIS IS THE NUMBER OF SIMULATED MAPS
-           numsim <- length(data[[metrics[num]]])
+           numsim <- length(dat[[metrics[num]]])
            points(actual[1,metrics[num]], pch=21, cex=1.75)
            actualval <- actual[1,metrics[num]]
-           cat("Actual Metric Value (", names(data[metrics[num]]), "): ", actualval, "\n")
-           higherthan <- sum(data[[metrics[num]]] > actualval)
+           cat("Actual Metric Value (", names(dat[metrics[num]]), "): ", actualval, "\n")
+           higherthan <- sum(dat[[metrics[num]]] > actualval)
            if(is.na(higherthan)) { higherthan <- 0 }
-           lowerthan <- sum(data[[metrics[num]]] < actualval)
+           lowerthan <- sum(dat[[metrics[num]]] < actualval)
            if(is.na(lowerthan)) { lowerthan <- 0 }
            sameas <- numsim - lowerthan - higherthan
            probhighereq <- (higherthan + sameas) / numsim
@@ -112,13 +113,13 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
        else {
          if(colour) {
            # THIS IS THE NUMBER OF SIMULATED MAPS
-           numsim <- length(data[[metrics[num]]])
+           numsim <- length(dat[[metrics[num]]])
            points(actual[2,metrics[num] - 38], pch=21, col="red", bg="red", cex=1.75)
            actualval <- actual[2,metrics[num] - 38]
-           cat("Actual Metric Value (", names(data[metrics[num]]), "): ", actualval, "\n")
-           higherthan <- sum(data[[metrics[num]]] > actualval)
+           cat("Actual Metric Value (", names(dat[metrics[num]]), "): ", actualval, "\n")
+           higherthan <- sum(dat[[metrics[num]]] > actualval)
            if(is.na(higherthan)) { higherthan <- 0 }
-           lowerthan <- sum(data[[metrics[num]]] < actualval)
+           lowerthan <- sum(dat[[metrics[num]]] < actualval)
            if(is.na(lowerthan)) { lowerthan <- 0 }
            sameas <- numsim - lowerthan - higherthan
            probhighereq <- (higherthan + sameas) / numsim
@@ -129,13 +130,13 @@ singleplotter <- function(data=data$result1, img=data$demoimage1, metrics=c(1,5,
          } # END IF
          else {
            # THIS IS THE NUMBER OF SIMULATED MAPS
-           numsim <- length(data[[metrics[num]]])
+           numsim <- length(dat[[metrics[num]]])
            points(actual[2,metrics[num] - 38], pch=21, cex=1.75)
            actualval <- actual[2,metrics[num] - 38]
-           cat("Actual Metric Value (", names(data[metrics[num]]), "): ", actualval, "\n")
-           higherthan <- sum(data[[metrics[num]]] > actualval)
+           cat("Actual Metric Value (", names(dat[metrics[num]]), "): ", actualval, "\n")
+           higherthan <- sum(dat[[metrics[num]]] > actualval)
            if(is.na(higherthan)) { higherthan <- 0 }
-           lowerthan <- sum(data[[metrics[num]]] < actualval)
+           lowerthan <- sum(dat[[metrics[num]]] < actualval)
            if(is.na(lowerthan)) { lowerthan <- 0 }
            sameas <- numsim - lowerthan - higherthan
            probhighereq <- (higherthan + sameas) / numsim

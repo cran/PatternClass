@@ -1,4 +1,4 @@
-singlemap <- function(IMG =data$demoimage1, CORRECTIONMAT="DIFF50", ENV="WhittleData", VERBOSE=TRUE, reps=1, LEVEL=6) {
+singlemap <- function(IMG =data$demoimage1, CORRECTIONMAT=data$DIFF50, VERBOSE=TRUE, reps=1, LEVEL=6) {
 
   #--------------------------------------------------------------
   # 
@@ -22,7 +22,7 @@ singlemap <- function(IMG =data$demoimage1, CORRECTIONMAT="DIFF50", ENV="Whittle
   on.exit(par(opar))
 
   # READ THE WHITTLE CORRECTION MATRIX FROM THE APPROPRIATE ENVIRONMENT
-  DIFFERENCEMAT <- get(CORRECTIONMAT, envir=get(ENV))
+  DIFFERENCEMAT <- CORRECTIONMAT
 
   # COMPUTE THE WHITTLE ESTIMATION OF RHO
   rho <- wi(BE=IMG, CONTROL=TRUE, SIZE=LEVEL)

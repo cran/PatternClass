@@ -7,7 +7,7 @@ Depict the empirical (null) distribution for class-focused pattern metrics.
 Produce a series of one or more boxplots depicting the empirical (null) distribuitons of class-focused pattern metrics, as computed for a single landscape map.  The code has been updated as of October 24 2016 to permit boxplots to be drawn even if landscape metrics have NA in them (those values are simply ignored).  As of 21 January 2020, the code now relies on landscapemetrics and raster packages rather than the diminished SDMTools.
 }
 \usage{
-singleplotter(data = data$result1, 
+singleplotter(dat = data$result1, 
   img = data$demoimage1, 
   metrics = c(1, 5, 10), 
   rows = 1, 
@@ -16,7 +16,7 @@ singleplotter(data = data$result1,
   colour = TRUE)
 }
 \arguments{
-  \item{data}{
+  \item{dat}{
 This is the output object produced by \code{singlemap}.  It contains the empirical (null) distributions for class-focused pattern metrics computed for a single binary landscape map.
 }
   \item{img}{
@@ -61,6 +61,6 @@ See Also \code{\link{singlemap}}, and \code{\link{doubleplotter}}.
 \examples{
 # EXAMPLE USES PREVIOUSLY PRODUCED RESULTS TO SPEED-UP THE EXAMPLE,
 # BUT THE EXAMPLE FROM singlemap() SHOULD BE CALLED FIRST
-singleplotter(data = data$result1, img = data$demoimage1, metrics = c(1, 5, 10))
+singleplotter(dat = data$result1, img = data$demoimage1, metrics = c(1, 5, 10))
 }
 \keyword{ distributions }
